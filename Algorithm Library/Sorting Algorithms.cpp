@@ -12,6 +12,7 @@ int LinearSearch(int arr[], int len, int element) {
 	// Linear Search
 	int pos = -1;
 
+	// Checks element by ele
 	for (int i = 0; i < len; i++)
 	{
 		if (arr[i] == element) {
@@ -25,82 +26,84 @@ int LinearSearch(int arr[], int len, int element) {
 
 // Binary Search is a searching algorithm used in a sorted array by repeatedly dividing the search interval in half. 
 // The idea of binary search is to use the information that the array is sorted and reduce the time complexity to O(Log n). 
-int BinarySearch(int arr[], int len, int element) 
+int BinarySearch(int arr[], int low, int high, int x)
 {
-	int pos = -1;
-	int temp = 0;
+	if (high >= low) {
+		int mid = low + (high - low) / 2;
 
-		while (true)
-		{
-			int mid = temp + (len / 2);
+		if (arr[mid] == x)
+			return mid;
 
-			if (arr[mid] == element) {
-				pos = mid;
-				break;
-			}
-			else if (arr[mid] > element) {
-				len /= 2;
-			}
-			else if (arr[mid] < element) {
-				temp = len / 2;
-				len = (len / 2);
-			}
-		}
+		if (arr[mid] > x)
+			return BinarySearch(arr, low, mid - 1, x);
 
-	return pos;
+		return BinarySearch(arr, mid + 1, high, x);
+	}
+
+	return -1;
 }
 
 int main()
 {
-	int arr[] = { 2, 4, 6, 8, 10, 12, 14 };
+	int arr[] = { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42,44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64 };
 	int len = sizeof(arr) / sizeof(arr[0]);
 
 	int element;
 	int validPos;
 
-	for (int i = 0; i < len; i++) {
-		std::cout << arr[i] << ' ';
-	}
-
-	cout << "\nInput number you want to find: ";
-	cin >> element;
-
-	cout << "\nInput position in array: ";
-	cin >> validPos;
-
 	// Linear Search
-	auto startls = high_resolution_clock::now();
-	int ls = LinearSearch(arr, len, element);
-	auto stopls = high_resolution_clock::now();
+	cout << "LINEAR SEARCH" << endl;
+	cout << "_____________\n\n";
 
-	auto durationls = duration_cast<nanoseconds>(stopls - startls);
-
-	if (ls == validPos)
+	for (int i = 0; i < len; i++)
 	{
-		cout << "Passed; ";
-	}
-	else {
-		cout << "Failed; ";
+		validPos = i;
+
+		auto startls = high_resolution_clock::now();
+		int ls = LinearSearch(arr, len, arr[i]);
+		auto stopls = high_resolution_clock::now();
+
+		auto durationls = duration_cast<nanoseconds>(stopls - startls);
+
+		if (ls == validPos)
+		{
+			cout << "Passed; Output: " << ls << "; ";
+		}
+		else {
+			cout << "Failed; Output: " << ls << "; ";
+		}
+
+		cout << "Time taken by Linear Search: "
+			<< durationls.count() << " nanoseconds" << endl;
 	}
 
-	cout << "Time taken by Linear Search: "
-		<< durationls.count() << " nanoseconds" << endl;
+	cout << "\n\n\n";
 
 	// Binary Search
-	auto startbs = high_resolution_clock::now();
-	int bs = BinarySearch(arr, len, element);
-	auto stopbs = high_resolution_clock::now();
+	cout << "BINARY SEARCH" << endl;
+	cout << "_____________\n\n";
 
-	auto durationbs = duration_cast<nanoseconds>(stopbs - startbs);
-
-	if (ls == validPos)
+	for (int i = 0; i < len; i++)
 	{
-		cout << "Passed; ";
-	}
-	else {
-		cout << "Failed; ";
+		validPos = i;
+
+		auto startbs = high_resolution_clock::now();
+		int bs = BinarySearch(arr, 0, len - 1, arr[i]);
+		auto stopbs = high_resolution_clock::now();
+
+		auto durationbs = duration_cast<nanoseconds>(stopbs - startbs);
+
+		if (bs == validPos)
+		{
+			cout << "Passed; Output: " << bs << "; ";
+		}
+		else {
+			cout << "Failed; Output: " << bs << "; ";
+		}
+
+		cout << "Time taken by Binary Search: "
+			<< durationbs.count() << " nanoseconds" << endl;
 	}
 
-	cout << "Time taken by Binary Search: "
-		<< durationbs.count() << " nanoseconds" << endl;
+	cout << "\n\n\n";
 }
